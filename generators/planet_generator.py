@@ -5,7 +5,7 @@ from math import pi
 
 
 PLANET_MASS_RANGE = (7.34767309e22, 2.46766e28) # moon to jupyter x 13
-PLANET_MASS_MEAN = 1.8982e+25
+PLANET_MASS_MEAN = 1.8982e+24
 PLANET_MASS_STD = 1.0e26
 PLANET_MASS_SPLIT = 2.38888e+25 # four times of Earth
 
