@@ -16,7 +16,12 @@ PLANET_TYPE = ['GasGiant', 'Rocky']
 PLANET_RADIUS_MEAN = (139822., 38226.) # jupyter; 6 times Earth
 PLANET_RADIUS_STD = (69911, 19113.) # jupyter; 3 times Earth
 
-ROCKY_PLANET_SURFACES = ['water', 'rock', 'sulfer', 'ammonia']
+ROCKY_PLANET_SURFACES = ['water', 'rock', 'sulfer', 'ammonia', 'methane']
+ROCKY_COLOR = {'water': (43, 101, 140), 'rock': (122, 128, 137), 'sulfer': (205, 175, 63),
+               'ammonia': (186, 194, 236), 'methane': (137, 52, 162)}
+GAS_PLANET_CONTENT = ['helium', 'hydrogen']
+GAS_COLOR = {'helium': (206, 98, 222), 'hydrogen': (219, 205, 132)}
+
 ROCKY_PLANET_SURFACES_W = [1] * len(ROCKY_PLANET_SURFACES)
 ROCKY_PLANET_SURFACES_W_NORM = np.array(ROCKY_PLANET_SURFACES_W) / sum(ROCKY_PLANET_SURFACES_W)
 
@@ -100,10 +105,9 @@ class PlanetGenerator:
         # radius
         radius = 1
         while not PLANET_RADIUS_SPLIT <= radius <= PLANET_RADIUS_RANGE[1]:
-            print(radius)
             radius = self.rng.normal(PLANET_RADIUS_MEAN[0], PLANET_RADIUS_MEAN[0])
-
-        return GasGiantPlanet(mass=mass, radius=radius, content='chicken')
+            content = self.rng.choice(GAS_PLANET_CONTENT)
+        return GasGiantPlanet(mass=mass, radius=radius, content=content)
 
     def get(self):
         return self.built_planet
