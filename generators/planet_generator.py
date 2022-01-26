@@ -12,6 +12,8 @@ PLANET_MASS_SPLIT = 2.38888e+25 # four times of Earth
 PLANET_RADIUS_RANGE = (1737.4, 559288) # moon to jupyter x 8
 PLANET_RADIUS_SPLIT = 25484.
 PLANET_TYPE = ['GasGiant', 'Rocky']
+PLANET_TYPE_W = [1] * len(PLANET_TYPE)
+PLANET_TYPE_W_NORM = np.array(PLANET_TYPE_W) / sum(PLANET_TYPE_W)
 
 PLANET_RADIUS_MEAN = (139822., 38226.) # jupyter; 6 times Earth
 PLANET_RADIUS_STD = (69911, 19113.) # jupyter; 3 times Earth
@@ -77,16 +79,19 @@ class RockyPlanet(Planet):
 class PlanetGenerator:
     def __init__(self, seed: int = None):
         mass = 1
-        radius = 1
         self.rng = np.random.RandomState(seed)
-        while not PLANET_MASS_RANGE[0] <= mass <= PLANET_MASS_RANGE[1]:
-            mass = self.rng.normal(PLANET_MASS_MEAN, PLANET_MASS_STD)
-            
-        if mass >= PLANET_MASS_SPLIT:  # gas gaint
+        # evenly choose planet type
+        planet_type = self.rng.choice(PLANET_TYPE, p=PLANET_TYPE_W_NORM)
+        
+        if planet_type == 'GasGiant':
+            while not PLANET_MASS_SPLIT <= mass <= PLANET_MASS_RANGE[1]:
+                mass = self.rng.normal(PLANET_MASS_MEAN, PLANET_MASS_STD)
             self.built_planet = self.build_gas(mass)
-        else:   # rocky
-            self.built_planet = self.build_rocky(mass)
 
+        elif planet_type == 'Rocky':
+            while not PLANET_MASS_RANGE[0] <= mass <= PLANET_MASS_SPLIT:
+                mass = self.rng.normal(PLANET_MASS_MEAN, PLANET_MASS_STD)
+            self.built_planet = self.build_rocky(mass)            
             
     def build_rocky(self, mass):
         # radius
